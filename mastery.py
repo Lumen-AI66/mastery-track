@@ -736,6 +736,14 @@ def cmd_check(_args) -> None:
 
 
 def main() -> None:
+    # Windows writes to the console in cp1252 by default, and model output is
+    # unbounded Unicode: one arrow or curly quote in a generated question and
+    # the command dies with UnicodeEncodeError. Ask for UTF-8 and degrade
+    # rather than crash.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
+
     p = argparse.ArgumentParser(description="Mastery Track — a daily examiner")
     sub = p.add_subparsers(dest="cmd", required=True)
 
