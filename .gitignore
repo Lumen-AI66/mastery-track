@@ -1,0 +1,5 @@
+.env
+context.md
+*.log
+__pycache__/
+*.pyc
